@@ -24,6 +24,16 @@ var server = http.createServer(function(req, res){
           res.end(Math.pow(Number(urlParts[1]),2)+"\n");
         }
         break;
+      case "add":
+        var sum = 0;
+          for(var i = 1; i < urlParts.length; i++){
+            if(urlParts[i].toString() === "NaN"){
+              res.end(urlParts[i] + " is not a number");
+            }
+            sum += Number(urlParts[i]);
+          }
+          res.end(sum+"\n");
+          break;
       default:
         res.end("400 - Bad Request\n");
         break;
