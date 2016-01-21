@@ -32,8 +32,31 @@ var server = http.createServer(function(req, res){
             }
             sum += Number(urlParts[i]);
           }
-          res.end(sum+"\n");
-          break;
+        res.end(sum+"\n");
+        break;
+      case "sentence":
+        if(urlParts[2] !== undefined){
+          res.end("Invalid input - too many arguments\n400 - Bad Request\n");
+        }
+        else{
+          res.write("{");
+          var response = {"letters": 0, "spaces": 0, "words": 0};
+          if(decodeURI(urlParts[1]).match(/\w/g) !== null){
+            response["letters"] = decodeURI(urlParts[1]).match(/\w/g).length;
+          }
+          if(decodeURI(urlParts[1]).match(/ /g) !== null){
+            response["spaces"] = decodeURI(urlParts[1]).match(/ /g).length;
+          }
+          if(decodeURI(urlParts[1]).match(/\w+/g) !== null){
+            response["words"] = decodeURI(urlParts[1]).match(/\w+/g).length;
+          }
+          for(var key in response){
+            res.write(key + ": " + response[key]);
+            if(key !== "words") res.write(", ");
+          }
+          res.end("}\n");
+        }
+        break;
       default:
         res.end("400 - Bad Request\n");
         break;
